@@ -1,16 +1,16 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use console::{style, Term};
+use console::Term;
 use indicatif::{ProgressBar, ProgressStyle};
 use owo_colors::OwoColorize;
 use regex::Regex;
-use reqwest::header::{HeaderMap, HeaderValue, COOKIE, SET_COOKIE, USER_AGENT};
+use reqwest::header::{HeaderMap, HeaderValue, SET_COOKIE, USER_AGENT};
 use scraper::{Html, Selector};
 use std::collections::HashSet;
 use std::time::Duration;
 use url::Url;
 
-/// 🍪 Cookie Scout - Analyze cookies and trackers on any website
+/// Cookie Scout - Website Privacy Analysis Tool
 #[derive(Parser, Debug)]
 #[command(name = "cookie-scout")]
 #[command(author, version, about, long_about = None)]
@@ -50,16 +50,6 @@ impl CookieCategory {
             CookieCategory::Marketing => "Marketing",
             CookieCategory::Social => "Social",
             CookieCategory::Unknown => "Unknown",
-        }
-    }
-
-    fn color(&self) -> &str {
-        match self {
-            CookieCategory::Essential => "green",
-            CookieCategory::Analytics => "yellow",
-            CookieCategory::Marketing => "red",
-            CookieCategory::Social => "blue",
-            CookieCategory::Unknown => "white",
         }
     }
 }
@@ -381,8 +371,13 @@ async fn analyze_url(url_str: &str) -> Result<AnalysisResult> {
 }
 
 fn print_header() {
+    use owo_colors::OwoColorize;
+    
     let term = Term::stdout();
     let _ = term.clear_screen();
+
+    // Light brown cookie color
+    let cookie = owo_colors::Rgb(210, 170, 120);
 
     println!();
     println!(
@@ -395,11 +390,11 @@ fn print_header() {
   ╚██████╗╚██████╔╝╚██████╔╝██║  ██╗██║███████╗    ███████║╚██████╗╚██████╔╝╚██████╔╝   ██║   
    ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝    ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝    ╚═╝   
 "#
-        .bright_cyan()
+        .color(cookie)
     );
     println!(
         "                              {}",
-        "🍪 Website Cookie & Tracker Analyzer 🔍".bright_yellow()
+        "Website Cookie & Tracker Analyzer".bright_yellow()
     );
     println!();
 }
@@ -427,11 +422,10 @@ fn print_divider() {
     );
 }
 
-fn print_section_header(icon: &str, title: &str) {
+fn print_section_header(title: &str) {
     println!();
     println!(
-        "  {} {}",
-        icon,
+        "  {}",
         title.bright_white().bold()
     );
     print_divider();
@@ -442,8 +436,8 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
     print_divider();
     println!(
         "  {} {}",
-        "🌐".bright_blue(),
-        format!("Analysis Complete: {}", result.url).bright_white().bold()
+        "Analysis Complete:".bright_blue(),
+        result.url.bright_white().bold()
     );
     print_divider();
 
@@ -452,12 +446,12 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
     println!("  ╭─────────────────────────────────────────────────────────────────────────╮");
     println!(
         "  │  {} {:<20} {} {:<20} {} {:<15} │",
-        "🍪".bright_yellow(),
-        format!("Cookies: {}", result.cookies.len()).bright_yellow(),
-        "🔍".bright_red(),
-        format!("Trackers: {}", result.trackers.len()).bright_red(),
-        "🌍".bright_blue(),
-        format!("3rd Party: {}", result.third_party_requests.len()).bright_blue()
+        "Cookies:".bright_yellow(),
+        result.cookies.len(),
+        "Trackers:".bright_red(),
+        result.trackers.len(),
+        "3rd Party:".bright_blue(),
+        result.third_party_requests.len()
     );
     println!("  ╰─────────────────────────────────────────────────────────────────────────╯");
 
@@ -466,10 +460,10 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
     print_privacy_score(privacy_score);
 
     // Cookies section
-    print_section_header("🍪", "COOKIES DETECTED");
+    print_section_header("COOKIES DETECTED");
     
     if result.cookies.is_empty() {
-        println!("  {} No cookies detected on initial page load", "✓".green());
+        println!("  {} No cookies detected on initial page load", "[OK]".green());
     } else {
         // Group cookies by category
         let mut essential = Vec::new();
@@ -496,10 +490,10 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
     }
 
     // Trackers section
-    print_section_header("🔍", "TRACKERS DETECTED");
+    print_section_header("TRACKERS DETECTED");
     
     if result.trackers.is_empty() {
-        println!("  {} No known trackers detected", "✓".green());
+        println!("  {} No known trackers detected", "[OK]".green());
     } else {
         for tracker in &result.trackers {
             let category_color = match tracker.category.as_str() {
@@ -509,46 +503,46 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
                 _ => "white",
             };
             
-            let icon = match tracker.category.as_str() {
-                "Analytics" => "📊",
-                "Marketing" => "📢",
-                "Social" => "👥",
-                "Security" => "🔒",
-                "CDN/Security" => "☁️",
-                "Error Tracking" => "🐛",
-                "Customer Support" => "💬",
-                "A/B Testing" => "🔬",
-                _ => "📌",
+            let prefix = match tracker.category.as_str() {
+                "Analytics" => "[ANALYTICS]",
+                "Marketing" => "[MARKETING]",
+                "Social" => "[SOCIAL]",
+                "Security" => "[SECURITY]",
+                "CDN/Security" => "[CDN]",
+                "Error Tracking" => "[ERROR]",
+                "Customer Support" => "[SUPPORT]",
+                "A/B Testing" => "[A/B TEST]",
+                _ => "[OTHER]",
+            };
+
+            let colored_prefix = match category_color {
+                "yellow" => prefix.yellow().to_string(),
+                "red" => prefix.red().to_string(),
+                "blue" => prefix.blue().to_string(),
+                _ => prefix.white().to_string(),
             };
 
             println!(
-                "  {} {} [{}] - {}",
-                icon,
+                "  {} {} - {}",
+                colored_prefix,
                 tracker.name.bright_white(),
-                match category_color {
-                    "yellow" => tracker.category.yellow().to_string(),
-                    "red" => tracker.category.red().to_string(),
-                    "blue" => tracker.category.blue().to_string(),
-                    _ => tracker.category.white().to_string(),
-                },
                 tracker.description.bright_black()
             );
         }
     }
 
     // Third-party domains section
-    print_section_header("🌍", "THIRD-PARTY DOMAINS");
+    print_section_header("THIRD-PARTY DOMAINS");
     
     if result.third_party_requests.is_empty() {
-        println!("  {} No third-party domains detected", "✓".green());
+        println!("  {} No third-party domains detected", "[OK]".green());
     } else {
         for (i, domain) in result.third_party_requests.iter().take(15).enumerate() {
-            println!("  {} {}", "•".bright_black(), domain.bright_cyan());
+            println!("  {}. {}", i + 1, domain.bright_cyan());
         }
         if result.third_party_requests.len() > 15 {
             println!(
-                "  {} ...and {} more",
-                "•".bright_black(),
+                "  ... and {} more",
                 (result.third_party_requests.len() - 15).to_string().bright_yellow()
             );
         }
@@ -558,8 +552,8 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
     print_divider();
     println!(
         "  {} {}",
-        "💡".bright_yellow(),
-        "Tip: Use -v for detailed cookie information".bright_black()
+        "Tip:".bright_yellow(),
+        "Use -v for detailed cookie information".bright_black()
     );
     print_divider();
     println!();
@@ -584,20 +578,18 @@ fn print_cookie_category(name: &str, cookies: &[&CookieInfo], color: &str, verbo
         if verbose {
             let flags = format!(
                 "{}{}{}",
-                if cookie.secure { "🔒" } else { "" },
-                if cookie.http_only { "🚫JS" } else { "" },
+                if cookie.secure { "[SEC]" } else { "" },
+                if cookie.http_only { "[HTTP]" } else { "" },
                 cookie.same_site.as_ref().map(|s| format!(" [{}]", s)).unwrap_or_default()
             );
             println!(
-                "  │   {} {} {}",
-                "•".bright_black(),
+                "  │   • {} {}",
                 cookie.name.bright_white(),
                 flags.bright_black()
             );
         } else {
             println!(
-                "  │   {} {}",
-                "•".bright_black(),
+                "  │   • {}",
                 cookie.name.bright_white()
             );
         }
@@ -631,12 +623,12 @@ fn calculate_privacy_score(result: &AnalysisResult) -> u32 {
 
 fn print_privacy_score(score: u32) {
     println!();
-    let (color, label, emoji) = match score {
-        90..=100 => ("green", "EXCELLENT", "🛡️"),
-        70..=89 => ("yellow", "GOOD", "✓"),
-        50..=69 => ("orange", "MODERATE", "⚠️"),
-        25..=49 => ("red", "POOR", "⚠️"),
-        _ => ("red", "CRITICAL", "🚨"),
+    let (color, label) = match score {
+        90..=100 => ("green", "EXCELLENT"),
+        70..=89 => ("yellow", "GOOD"),
+        50..=69 => ("yellow", "MODERATE"),
+        25..=49 => ("red", "POOR"),
+        _ => ("red", "CRITICAL"),
     };
 
     let bar_width = 40;
@@ -650,21 +642,27 @@ fn print_privacy_score(score: u32) {
     );
 
     println!("  ╭─────────────────────────────────────────────────────────────────────────╮");
-    println!(
-        "  │  {} PRIVACY SCORE: {}/100 - {}                                         │",
-        emoji,
-        score,
-        label
-    );
     
+    let colored_label = match color {
+        "green" => label.green().to_string(),
+        "yellow" => label.yellow().to_string(),
+        "red" => label.red().to_string(),
+        _ => label.white().to_string(),
+    };
+
     let colored_bar = match color {
         "green" => bar.green().to_string(),
         "yellow" => bar.yellow().to_string(),
         "red" => bar.red().to_string(),
-        _ => bar.yellow().to_string(),
+        _ => bar.white().to_string(),
     };
     
-    println!("  │  [{}]  │", colored_bar);
+    println!(
+        "  │  PRIVACY SCORE: {}/100 - {}",
+        score,
+        colored_label
+    );
+    println!("  │  [{}]", colored_bar);
     println!("  ╰─────────────────────────────────────────────────────────────────────────╯");
 }
 
@@ -681,7 +679,7 @@ async fn main() -> Result<()> {
         args.url.clone()
     };
 
-    println!("  {} Analyzing: {}", "🎯".bright_green(), url.bright_cyan());
+    println!("  {} {}", "Analyzing:".bright_green(), url.bright_cyan());
     println!();
 
     // Create animated spinner sequence
@@ -712,13 +710,13 @@ async fn main() -> Result<()> {
             println!();
             println!(
                 "  {} {}",
-                "❌".bright_red(),
+                "[ERROR]".bright_red(),
                 format!("Error analyzing URL: {}", e).red()
             );
             println!();
             println!(
                 "  {} Make sure the URL is correct and accessible",
-                "💡".bright_yellow()
+                "Tip:".bright_yellow()
             );
             println!();
         }
@@ -726,4 +724,3 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
-
