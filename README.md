@@ -1,19 +1,19 @@
-# 🍪 Cookie Scout
+# Cookie Scout
 
 A powerful command-line tool written in Rust that analyzes websites for cookies and trackers.
 
-![Rust](https://img.shields.io/badge/Rust-1.75+-orange?logo=rust)
+![Rust](https://img.shields.io/badge/Rust-1.83+-orange?logo=rust)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 ## Features
 
-- 🔍 **Cookie Detection** - Identifies and categorizes cookies (Essential, Analytics, Marketing, Social)
-- 📊 **Tracker Detection** - Detects 50+ known tracking scripts and pixels
-- 🌍 **Third-Party Analysis** - Lists all third-party domains loaded by the page
-- 🛡️ **Privacy Score** - Calculates an overall privacy score (0-100)
-- ✨ **Beautiful Terminal UI** - Colorful, animated output with progress spinners
-- 🐳 **Dockerized** - No need to install Rust locally
+- **Cookie Detection** - Identifies and categorizes cookies (Essential, Analytics, Marketing, Social)
+- **Tracker Detection** - Detects 50+ known tracking scripts and pixels
+- **Third-Party Analysis** - Lists all third-party domains loaded by the page
+- **Privacy Score** - Calculates an overall privacy score (0-100)
+- **Beautiful Terminal UI** - Colorful, animated output with progress spinners
+- **Dockerized** - No need to install Rust locally
 
 ## Quick Start with Docker
 
@@ -69,22 +69,39 @@ Options:
   ╚██████╗╚██████╔╝╚██████╔╝██║  ██╗██║███████╗    ███████║╚██████╗╚██████╔╝╚██████╔╝   ██║
    ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝    ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝    ╚═╝
 
-                              🍪 Website Cookie & Tracker Analyzer 🔍
+                              Website Cookie & Tracker Analyzer
 
-  🎯 Analyzing: https://example.com
+  Analyzing: https://example.com
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  🌐 Analysis Complete: https://example.com
+  Analysis Complete: https://example.com
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   ╭─────────────────────────────────────────────────────────────────────────╮
-  │  🍪 Cookies: 5             🔍 Trackers: 3            🌍 3rd Party: 12   │
+  │  Cookies: 5             Trackers: 3            3rd Party: 12           │
   ╰─────────────────────────────────────────────────────────────────────────╯
 
   ╭─────────────────────────────────────────────────────────────────────────╮
-  │  🛡️ PRIVACY SCORE: 65/100 - MODERATE                                    │
+  │  PRIVACY SCORE: 65/100 - MODERATE                                      │
   │  [██████████████████████████░░░░░░░░░░░░░░]                             │
   ╰─────────────────────────────────────────────────────────────────────────╯
+
+  COOKIES DETECTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ├─ Essential (2 cookies)
+  │   • session_id
+  │   • csrf_token
+  ├─ Analytics (2 cookies)
+  │   • _ga
+  │   • _gid
+  ├─ Marketing (1 cookies)
+  │   • _fbp
+
+  TRACKERS DETECTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [ANALYTICS] google-analytics - Google Analytics tracking
+  [ANALYTICS] gtag - Google Global Site Tag
+  [MARKETING] facebook.*pixel - Facebook Pixel
 ```
 
 ## What It Detects
@@ -115,11 +132,11 @@ The privacy score is calculated based on:
 
 | Score | Rating |
 |-------|--------|
-| 90-100 | 🛡️ Excellent |
-| 70-89 | ✓ Good |
-| 50-69 | ⚠️ Moderate |
-| 25-49 | ⚠️ Poor |
-| 0-24 | 🚨 Critical |
+| 90-100 | Excellent |
+| 70-89 | Good |
+| 50-69 | Moderate |
+| 25-49 | Poor |
+| 0-24 | Critical |
 
 ## Local Development (without Docker)
 
@@ -136,4 +153,3 @@ cargo build --release
 ## License
 
 MIT License - See LICENSE file for details.
-
