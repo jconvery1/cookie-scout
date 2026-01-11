@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  cookie-scout:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Enable TTY for colored output
+    tty: true
+    stdin_open: true
+    # Network access for fetching websites
+    network_mode: bridge
+
