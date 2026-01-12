@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "A terminal tool to analyze cookies and trackers on websites"
 authors = ["Cookie Scout Team"]
+license = "MIT"
 
 [dependencies]
 # HTTP client
