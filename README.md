@@ -13,7 +13,43 @@ A powerful command-line tool written in Rust that analyzes websites for cookies 
 - **Third-Party Analysis** - Lists all third-party domains loaded by the page
 - **Privacy Score** - Calculates an overall privacy score (0-100)
 - **Beautiful Terminal UI** - Colorful, animated output with progress spinners
+- **Cross-Platform** - Pre-built binaries for macOS, Linux, and Windows
 - **Dockerized** - No need to install Rust locally
+
+## Installation
+
+### Pre-built Binaries (Recommended)
+
+Download the latest release for your platform from the [Releases page](https://github.com/jconvery1/cookie-scout/releases).
+
+**macOS (Apple Silicon):**
+```bash
+curl -LO https://github.com/jconvery1/cookie-scout/releases/latest/download/cookie-scout-macos-aarch64.tar.gz
+tar -xzf cookie-scout-macos-aarch64.tar.gz
+chmod +x cookie-scout
+sudo mv cookie-scout /usr/local/bin/
+```
+
+**macOS (Intel):**
+```bash
+curl -LO https://github.com/jconvery1/cookie-scout/releases/latest/download/cookie-scout-macos-x86_64.tar.gz
+tar -xzf cookie-scout-macos-x86_64.tar.gz
+chmod +x cookie-scout
+sudo mv cookie-scout /usr/local/bin/
+```
+
+**Linux (x86_64):**
+```bash
+curl -LO https://github.com/jconvery1/cookie-scout/releases/latest/download/cookie-scout-linux-x86_64.tar.gz
+tar -xzf cookie-scout-linux-x86_64.tar.gz
+chmod +x cookie-scout
+sudo mv cookie-scout /usr/local/bin/
+```
+
+**Windows:**
+Download `cookie-scout-windows-x86_64.zip` from the releases page, extract it, and add the folder to your PATH.
+
+### Using Docker
 
 ## Quick Start with Docker
 
