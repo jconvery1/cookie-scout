@@ -6,16 +6,6 @@ A powerful command-line tool written in Rust that analyzes websites for cookies 
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## Features
-
-- **Cookie Detection** - Identifies and categorizes cookies (Essential, Analytics, Marketing, Social)
-- **Tracker Detection** - Detects 50+ known tracking scripts and pixels
-- **Third-Party Analysis** - Lists all third-party domains loaded by the page
-- **Privacy Score** - Calculates an overall privacy score (0-100)
-- **Beautiful Terminal UI** - Colorful, animated output with progress spinners
-- **Cross-Platform** - Pre-built binaries for macOS, Linux, and Windows
-- **Dockerized** - No need to install Rust locally
-
 ## Installation
 
 ### Pre-built Binaries (Recommended)
