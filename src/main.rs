@@ -512,6 +512,7 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
                 "Error Tracking" => "[ERROR]",
                 "Customer Support" => "[SUPPORT]",
                 "A/B Testing" => "[A/B TEST]",
+                "Marketing/CRM" => "[CRM]",
                 _ => "[OTHER]",
             };
 
@@ -522,12 +523,41 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
                 _ => prefix.white().to_string(),
             };
 
-            println!(
-                "  {} {} - {}",
-                colored_prefix,
-                tracker.name.bright_white(),
-                tracker.description.bright_black()
-            );
+            if verbose {
+                println!(
+                    "  {} {}",
+                    colored_prefix,
+                    tracker.name.bright_white(),
+                );
+                println!(
+                    "       {} {}",
+                    "Description:".bright_black(),
+                    tracker.description.cyan()
+                );
+                let privacy_impact = match tracker.category.as_str() {
+                    "Marketing" | "Marketing/CRM" => "High - Tracks users across websites for advertising",
+                    "Analytics" => "Medium - Collects usage data and behavior patterns",
+                    "Social" => "Medium - May share data with social networks",
+                    "A/B Testing" => "Low - Used for page optimization experiments",
+                    "Security" | "CDN/Security" => "Low - Used for site protection",
+                    "Error Tracking" => "Low - Collects error reports for debugging",
+                    "Customer Support" => "Low - Enables support chat functionality",
+                    _ => "Unknown - Impact could not be determined",
+                };
+                println!(
+                    "       {} {}",
+                    "Privacy Impact:".bright_black(),
+                    privacy_impact.bright_black()
+                );
+                println!();
+            } else {
+                println!(
+                    "  {} {} - {}",
+                    colored_prefix,
+                    tracker.name.bright_white(),
+                    tracker.description.bright_black()
+                );
+            }
         }
     }
 
@@ -537,10 +567,42 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
     if result.third_party_requests.is_empty() {
         println!("  {} No third-party domains detected", "[OK]".green());
     } else {
-        for (i, domain) in result.third_party_requests.iter().take(15).enumerate() {
+        let display_limit = if verbose { result.third_party_requests.len() } else { 15 };
+        for (i, domain) in result.third_party_requests.iter().take(display_limit).enumerate() {
             println!("  {}. {}", i + 1, domain.bright_cyan());
+            if verbose {
+                // Categorize the third-party domain
+                let domain_lower = domain.to_lowercase();
+                let domain_type = if domain_lower.contains("google") || domain_lower.contains("gstatic") {
+                    ("Google Services", "Analytics, fonts, APIs, or advertising")
+                } else if domain_lower.contains("facebook") || domain_lower.contains("fbcdn") {
+                    ("Facebook/Meta", "Social plugins or tracking")
+                } else if domain_lower.contains("cloudflare") {
+                    ("Cloudflare", "CDN and security services")
+                } else if domain_lower.contains("cdn") || domain_lower.contains("akamai") || domain_lower.contains("fastly") {
+                    ("CDN", "Content delivery network")
+                } else if domain_lower.contains("analytics") || domain_lower.contains("tracking") {
+                    ("Analytics", "User tracking and analytics")
+                } else if domain_lower.contains("ads") || domain_lower.contains("doubleclick") {
+                    ("Advertising", "Ad serving and tracking")
+                } else if domain_lower.contains("twitter") || domain_lower.contains("linkedin") {
+                    ("Social Media", "Social network integration")
+                } else if domain_lower.contains("stripe") || domain_lower.contains("paypal") {
+                    ("Payment", "Payment processing")
+                } else if domain_lower.contains("sentry") || domain_lower.contains("bugsnag") {
+                    ("Error Tracking", "Error monitoring service")
+                } else {
+                    ("External", "Third-party resource")
+                };
+                println!(
+                    "      {} {} - {}",
+                    "Type:".bright_black(),
+                    domain_type.0.yellow(),
+                    domain_type.1.bright_black()
+                );
+            }
         }
-        if result.third_party_requests.len() > 15 {
+        if !verbose && result.third_party_requests.len() > 15 {
             println!(
                 "  ... and {} more",
                 (result.third_party_requests.len() - 15).to_string().bright_yellow()
@@ -550,11 +612,19 @@ fn print_results(result: &AnalysisResult, verbose: bool) {
 
     println!();
     print_divider();
-    println!(
-        "  {} {}",
-        "Tip:".bright_yellow(),
-        "Use -v for detailed cookie information".bright_black()
-    );
+    if verbose {
+        println!(
+            "  {} {}",
+            "Verbose mode:".bright_green(),
+            "Showing detailed information for all items".bright_black()
+        );
+    } else {
+        println!(
+            "  {} {}",
+            "Tip:".bright_yellow(),
+            "Use -v for detailed cookie, tracker, and domain information".bright_black()
+        );
+    }
     print_divider();
     println!();
 }
@@ -575,23 +645,72 @@ fn print_cookie_category(name: &str, cookies: &[&CookieInfo], color: &str, verbo
     println!("{}", header);
 
     for cookie in cookies {
+        println!(
+            "  │   • {}",
+            cookie.name.bright_white()
+        );
+        
         if verbose {
-            let flags = format!(
-                "{}{}{}",
-                if cookie.secure { "[SEC]" } else { "" },
-                if cookie.http_only { "[HTTP]" } else { "" },
-                cookie.same_site.as_ref().map(|s| format!(" [{}]", s)).unwrap_or_default()
-            );
+            // Show domain
+            if let Some(ref domain) = cookie.domain {
+                println!(
+                    "  │       {} {}",
+                    "Domain:".bright_black(),
+                    domain.cyan()
+                );
+            }
+            
+            // Show security attributes
+            let secure_status = if cookie.secure {
+                "Yes".green().to_string()
+            } else {
+                "No".red().to_string()
+            };
             println!(
-                "  │   • {} {}",
-                cookie.name.bright_white(),
-                flags.bright_black()
+                "  │       {} {}",
+                "Secure:".bright_black(),
+                secure_status
             );
-        } else {
+            
+            let http_only_status = if cookie.http_only {
+                "Yes".green().to_string()
+            } else {
+                "No".yellow().to_string()
+            };
             println!(
-                "  │   • {}",
-                cookie.name.bright_white()
+                "  │       {} {}",
+                "HttpOnly:".bright_black(),
+                http_only_status
             );
+            
+            // Show SameSite
+            let same_site_value = cookie.same_site.as_ref().map(|s| s.as_str()).unwrap_or("not set");
+            let same_site_colored = match same_site_value.to_lowercase().as_str() {
+                "strict" => same_site_value.green().to_string(),
+                "lax" => same_site_value.yellow().to_string(),
+                "none" => same_site_value.red().to_string(),
+                _ => same_site_value.bright_black().to_string(),
+            };
+            println!(
+                "  │       {} {}",
+                "SameSite:".bright_black(),
+                same_site_colored
+            );
+            
+            // Show category explanation
+            let category_desc = match cookie.category {
+                CookieCategory::Essential => "Required for basic site functionality",
+                CookieCategory::Analytics => "Used to track user behavior and site performance",
+                CookieCategory::Marketing => "Used for advertising and tracking across sites",
+                CookieCategory::Social => "Related to social media integrations",
+                CookieCategory::Unknown => "Purpose could not be determined",
+            };
+            println!(
+                "  │       {} {}",
+                "Purpose:".bright_black(),
+                category_desc.bright_black()
+            );
+            println!("  │");
         }
     }
 }
