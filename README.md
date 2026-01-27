@@ -1,6 +1,6 @@
 # Cookie Scout
 
-A powerful command-line tool written in Rust that analyzes websites for cookies and trackers.
+A command-line tool written in Rust that analyzes websites for cookies and trackers.
 
 ![Rust](https://img.shields.io/badge/Rust-1.83+-orange?logo=rust)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
