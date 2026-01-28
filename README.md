@@ -2,9 +2,9 @@
 
 A command-line tool written in Rust that analyzes websites for cookies and trackers.
 
-![Rust](https://img.shields.io/badge/Rust-1.83+-orange?logo=rust)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
-![License](https://img.shields.io/badge/License-MIT-green)
+[![Rust](https://img.shields.io/badge/Rust-1.83+-orange?logo=rust)](https://www.rust-lang.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://hub.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/jconvery1/cookie-scout/blob/master/LICENSE)
 
 ## Installation
 
