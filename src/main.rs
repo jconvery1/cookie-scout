@@ -10,9 +10,9 @@ use std::collections::HashSet;
 use std::time::Duration;
 use url::Url;
 
-/// Cookie Scout - Website Privacy Analysis Tool
+/// Recon - Website Privacy Analysis Tool
 #[derive(Parser, Debug)]
-#[command(name = "cookie-scout")]
+#[command(name = "recon")]
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// The URL to analyze (e.g., https://example.com)
@@ -382,8 +382,8 @@ fn print_header() {
     println!();
     println!(
         "  {} {}",
-        "🍪".color(cookie),
-        "Cookie Scout".color(cookie).bold()
+        "🥷".color(cookie),
+        "Recon".color(cookie).bold()
     );
     println!(
         "  {}",

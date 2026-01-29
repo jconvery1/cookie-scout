@@ -1,5 +1,5 @@
 services:
-  cookie-scout:
+  recon:
     build:
       context: .
       dockerfile: Dockerfile

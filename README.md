@@ -1,43 +1,43 @@
-# Cookie Scout
+# Recon 🥷
 
 A command-line tool written in Rust that analyzes websites for cookies and trackers.
 
 [![Rust](https://img.shields.io/badge/Rust-1.83+-orange?logo=rust)](https://www.rust-lang.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://hub.docker.com/)
-[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/jconvery1/cookie-scout/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/jconvery1/recon/blob/master/LICENSE)
 
 ## Installation
 
 ### Pre-built Binaries (Recommended)
 
-Download the latest release for your platform from the [Releases page](https://github.com/jconvery1/cookie-scout/releases).
+Download the latest release for your platform from the [Releases page](https://github.com/jconvery1/recon/releases).
 
 **macOS (Apple Silicon):**
 ```bash
-curl -LO https://github.com/jconvery1/cookie-scout/releases/latest/download/cookie-scout-macos-aarch64.tar.gz
-tar -xzf cookie-scout-macos-aarch64.tar.gz
-chmod +x cookie-scout
-sudo mv cookie-scout /usr/local/bin/
+curl -LO https://github.com/jconvery1/recon/releases/latest/download/recon-macos-aarch64.tar.gz
+tar -xzf recon-macos-aarch64.tar.gz
+chmod +x recon
+sudo mv recon /usr/local/bin/
 ```
 
 **macOS (Intel):**
 ```bash
-curl -LO https://github.com/jconvery1/cookie-scout/releases/latest/download/cookie-scout-macos-x86_64.tar.gz
-tar -xzf cookie-scout-macos-x86_64.tar.gz
-chmod +x cookie-scout
-sudo mv cookie-scout /usr/local/bin/
+curl -LO https://github.com/jconvery1/recon/releases/latest/download/recon-macos-x86_64.tar.gz
+tar -xzf recon-macos-x86_64.tar.gz
+chmod +x recon
+sudo mv recon /usr/local/bin/
 ```
 
 **Linux (x86_64):**
 ```bash
-curl -LO https://github.com/jconvery1/cookie-scout/releases/latest/download/cookie-scout-linux-x86_64.tar.gz
-tar -xzf cookie-scout-linux-x86_64.tar.gz
-chmod +x cookie-scout
-sudo mv cookie-scout /usr/local/bin/
+curl -LO https://github.com/jconvery1/recon/releases/latest/download/recon-linux-x86_64.tar.gz
+tar -xzf recon-linux-x86_64.tar.gz
+chmod +x recon
+sudo mv recon /usr/local/bin/
 ```
 
 **Windows:**
-Download `cookie-scout-windows-x86_64.zip` from the releases page, extract it, and add the folder to your PATH.
+Download `recon-windows-x86_64.zip` from the releases page, extract it, and add the folder to your PATH.
 
 ### Using Docker
 
@@ -46,19 +46,19 @@ Download `cookie-scout-windows-x86_64.zip` from the releases page, extract it, a
 ### Build the image
 
 ```bash
-docker build -t cookie-scout .
+docker build -t recon .
 ```
 
 ### Analyze a website
 
 ```bash
-docker run --rm -it cookie-scout https://example.com
+docker run --rm -it recon https://example.com
 ```
 
 ### With verbose output (shows cookie details)
 
 ```bash
-docker run --rm -it cookie-scout -v https://example.com
+docker run --rm -it recon -v https://example.com
 ```
 
 ### Using docker-compose
@@ -68,13 +68,13 @@ docker run --rm -it cookie-scout -v https://example.com
 docker-compose build
 
 # Run
-docker-compose run --rm cookie-scout https://example.com
+docker-compose run --rm recon https://example.com
 ```
 
 ## Usage
 
 ```
-cookie-scout [OPTIONS] <URL>
+recon [OPTIONS] <URL>
 
 Arguments:
   <URL>  The URL to analyze (e.g., https://example.com)
@@ -88,7 +88,7 @@ Options:
 ## Example Output
 
 ```
-  🍪 Cookie Scout
+  Recon 🥷
   Website Cookie & Tracker Analyzer
 
   Analyzing: https://example.com
@@ -167,7 +167,7 @@ If you have Rust installed:
 cargo build --release
 
 # Run
-./target/release/cookie-scout https://example.com
+./target/release/recon https://example.com
 ```
 
 ## License

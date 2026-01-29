@@ -4,13 +4,13 @@ FROM rust:latest AS builder
 WORKDIR /app
 
 # Create a new empty project for caching dependencies
-RUN cargo init --name cookie-scout
+RUN cargo init --name recon
 
 # Copy over manifests
 COPY Cargo.toml Cargo.lock* ./
 
 # Build dependencies only (this layer will be cached)
-RUN cargo build --release && rm -rf src target/release/cookie-scout target/release/deps/cookie_scout*
+RUN cargo build --release && rm -rf src target/release/recon target/release/deps/recon*
 
 # Copy source code
 COPY src ./src
@@ -28,10 +28,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the binary from builder
-COPY --from=builder /app/target/release/cookie-scout /usr/local/bin/cookie-scout
+COPY --from=builder /app/target/release/recon /usr/local/bin/recon
 
 # Set the entrypoint
-ENTRYPOINT ["cookie-scout"]
+ENTRYPOINT ["recon"]
 
 # Default help command
 CMD ["--help"]

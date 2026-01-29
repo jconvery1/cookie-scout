@@ -1,11 +1,11 @@
 [package]
-name = "cookie-scout"
+name = "recon"
 version = "0.0.1"
 edition = "2021"
 description = "A terminal tool to analyze cookies and trackers on websites"
 authors = ["jconvery1"]
 license = "MIT"
-repository = "https://github.com/jconvery1/cookie-scout"
+repository = "https://github.com/jconvery1/recon"
 readme = "README.md"
 keywords = ["cookies", "privacy", "trackers", "web", "security"]
 categories = ["command-line-utilities", "web-programming"]
