@@ -3,7 +3,6 @@
 A command-line tool written in Rust that analyzes websites for cookies and trackers.
 
 [![Rust](https://img.shields.io/badge/Rust-1.83+-orange?logo=rust)](https://www.rust-lang.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://hub.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/jconvery1/recon/blob/master/LICENSE)
 
 ## Installation
@@ -38,38 +37,6 @@ sudo mv recon /usr/local/bin/
 
 **Windows:**
 Download `recon-windows-x86_64.zip` from the releases page, extract it, and add the folder to your PATH.
-
-### Using Docker
-
-## Quick Start with Docker
-
-### Build the image
-
-```bash
-docker build -t recon .
-```
-
-### Analyze a website
-
-```bash
-docker run --rm -it recon https://example.com
-```
-
-### With verbose output (shows cookie details)
-
-```bash
-docker run --rm -it recon -v https://example.com
-```
-
-### Using docker-compose
-
-```bash
-# Build
-docker-compose build
-
-# Run
-docker-compose run --rm recon https://example.com
-```
 
 ## Usage
 
@@ -158,7 +125,7 @@ The privacy score is calculated based on:
 | 25-49 | Poor |
 | 0-24 | Critical |
 
-## Local Development (without Docker)
+## Building from Source
 
 If you have Rust installed:
 
