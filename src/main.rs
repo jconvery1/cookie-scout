@@ -794,23 +794,9 @@ async fn main() -> Result<()> {
     println!("  {} {}", "Analyzing:".bright_green(), url.bright_cyan());
     println!();
 
-    // Create animated spinner sequence
-    let spinner = create_spinner("Connecting to website...");
-    tokio::time::sleep(Duration::from_millis(500)).await;
-    
-    spinner.set_message("Fetching page content...");
-    tokio::time::sleep(Duration::from_millis(300)).await;
+    let spinner = create_spinner("Analyzing website...");
 
-    spinner.set_message("Analyzing cookies...");
-    
-    // Perform the actual analysis
     let result = analyze_url(&url).await;
-
-    spinner.set_message("Detecting trackers...");
-    tokio::time::sleep(Duration::from_millis(300)).await;
-
-    spinner.set_message("Scanning for third-party requests...");
-    tokio::time::sleep(Duration::from_millis(300)).await;
 
     spinner.finish_and_clear();
 
