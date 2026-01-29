@@ -383,7 +383,7 @@ fn print_header() {
     println!(
         "  {} {}",
         "🥷".color(cookie),
-        "Recon".color(cookie).bold()
+        "Recon".white().bold()
     );
     println!(
         "  {}",
